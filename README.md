@@ -2,62 +2,88 @@
 
 A modern, secure, and feature-rich NestJS API boilerplate with MongoDB integration, advanced authentication, file storage, and optimized query capabilities.
 
-## Stack Technique
+## Stack
 
-- **Backend Framework**: NestJS avec TypeScript
-- **Base de données**: MongoDB avec Mongoose
-- **Authentification**: JWT (JSON Web Tokens)
+- **Backend Framework**: NestJS with TypeScript
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT (JSON Web Tokens)
 - **Documentation API**: Swagger/OpenAPI
-- **Stockage de fichiers**: Abstraction modulaire (support local et Cloudflare R2)
-- **Validation**: class-validator et ValidationPipe
-- **Sécurité**: Helmet, CORS, hachage de mots de passe
-- **Planification**: @nestjs/schedule pour les tâches programmées
-- **Email**: Service d'email intégré
+- **File Storage**: Modular abstraction (local and Cloudflare R2 support)
+- **Validation**: class-validator and ValidationPipe
+- **Security**: Helmet, CORS, password hashing
+- **Scheduling**: @nestjs/schedule for scheduled tasks
+- **Email**: Integrated email service
+- **Payments**: Lemon Squeezy integration for subscriptions and one-time payments
 
-## Fonctionnalités Principales
+## Main Features
 
-1. **Configuration de l'API**
-   - Architecture modulaire NestJS
-   - Documentation Swagger complète
-   - Variables d'environnement configurables
+1. **API Configuration**
+   - Modular NestJS architecture
+   - Comprehensive Swagger documentation
+   - Configurable environment variables
 
-2. **Sécurité**
-   - Authentification JWT
-   - Autorisation basée sur les rôles et permissions
-   - Protection contre les attaques courantes avec Helmet
-   - Gestion de blacklist des tokens
+2. **Advanced Security**
+   - JWT authentication with refresh tokens
+   - Role and permission-based authorization
+   - Fine-grained access control
+   - Protection against common attacks with Helmet
+   - Token blacklist management
+   - Account lockout after failed login attempts
 
-3. **Intégration MongoDB**
-   - Schémas optimisés: Utilisateurs, Rôles, Catégories, etc.
-   - Pattern Repository pour l'accès aux données
+3. **Role and Permission System**
+   - Hierarchical role management
+   - Granular permission controls
+   - Role-based access control (RBAC)
+   - Permission-based feature access
+   - Default roles (Admin, User, Editor)
+   - Custom role creation
 
-4. **Fonctionnalités de Requête Avancées**
-   - Pagination basée sur curseur
-   - Filtrage, tri et recherche
-   - Sélection de champs (projection)
-   - Optimisation des performances de requête
+4. **MongoDB Integration**
+   - Optimized schemas: Users, Roles, Categories, etc.
+   - Repository pattern for data access
+   - Proper schema validation and indexing
 
-5. **Gestion des Fichiers**
-   - Upload et gestion de fichiers
-   - Abstraction de stockage (local/cloud)
+5. **Advanced Query Features**
+   - Cursor-based pagination for optimal performance
+   - Traditional page-based pagination
+   - Filtering, sorting and search
+   - Field selection (projection)
+   - Query performance optimization
 
-6. **Standardisation des Réponses**
-   - Format de réponse uniforme
-   - Gestion globale des erreurs
-   - Intercepteurs de transformation
+6. **File Management**
+   - File upload and management
+   - Storage abstraction (local/cloud)
+   - Support for Cloudflare R2 Storage
+   - Signed URLs for secure access
+   - File metadata handling
+   - Flexible file access control
 
-## Configuration du Projet
+7. **Payment Integration**
+   - Lemon Squeezy integration for payments
+   - Subscription management (create, update, cancel)
+   - One-time payment processing
+   - Webhook handling for payment events
+   - Customer portal integration
+   - Payment history tracking
 
-### Prérequis
+8. **Standardized Responses**
+   - Uniform response format
+   - Global error handling
+   - Transformation interceptors
+
+## Project Configuration
+
+### Prerequisites
 
 - Node.js (v16+)
-- npm ou yarn
-- MongoDB (local ou distant)
-- (Optionnel) Compte Cloudflare pour R2 Storage
+- npm or yarn
+- MongoDB (local or remote)
+- (Optional) Cloudflare account for R2 Storage
+- (Optional) Lemon Squeezy account for payments
 
-### Variables d'Environnement
+### Environment Variables
 
-Créez un fichier `.env` à la racine du projet en vous basant sur `.env.example`:
+Create a `.env` file at the project root based on `.env.example`:
 
 ```
 # Application
@@ -72,65 +98,82 @@ JWT_SECRET=your_jwt_secret_key
 JWT_EXPIRES_IN=7d
 JWT_REFRESH_EXPIRES_IN=30d
 
-# Storage (local ou cloudflare)
+# Storage (local or cloudflare)
 STORAGE_TYPE=local
 STORAGE_LOCAL_PATH=./uploads
 
-# Cloudflare R2 (si STORAGE_TYPE=cloudflare)
+# Cloudflare R2 (if STORAGE_TYPE=cloudflare)
+R2_ENDPOINT=https://your-account.r2.cloudflarestorage.com
 R2_ACCOUNT_ID=your_account_id
 R2_ACCESS_KEY_ID=your_access_key
 R2_SECRET_ACCESS_KEY=your_secret_key
 R2_BUCKET_NAME=your_bucket_name
+R2_PUBLIC_URL=your_public_url
+R2_USE_SIGNED_URLS=false
+R2_URL_EXPIRATION_SECONDS=3600
+
+# Lemon Squeezy (for payment integration)
+LEMON_SQUEEZY_API_KEY=your_api_key
+LEMON_SQUEEZY_STORE_ID=your_store_id
+LEMON_SQUEEZY_WEBHOOK_SECRET=your_webhook_secret
 ```
 
-## Installation et Démarrage
+## Installation and Startup
 
-1. **Installer les dépendances**
+1. **Install dependencies**
    ```bash
    npm install
    ```
 
-2. **Démarrer en mode développement**
+2. **Start in development mode**
    ```bash
    npm run start:dev
    ```
 
-3. **Démarrer en mode production**
+3. **Start in production mode**
    ```bash
    npm run build
    npm run start:prod
    ```
 
-4. **Accéder à la documentation API**
-   Ouvrez votre navigateur à l'adresse: `http://localhost:3000/api/docs`
+4. **Access API documentation**
+   Open your browser at: `http://localhost:3000/api/docs`
 
-## Structure du Projet
+## Project Structure
 
 ```
 src/
-├── auth/                 # Module d'authentification
-├── common/               # Utilitaires, intercepteurs, filtres partagés
-├── config/               # Configuration de l'application
-├── database/             # Modules de base de données
-│   ├── categories/       # Module de catégories
-│   ├── roles/            # Module de rôles
-│   ├── users/            # Module d'utilisateurs
-│   └── schemas/          # Schémas Mongoose
-├── storage/              # Module de stockage de fichiers
-├── app.module.ts         # Module principal
-└── main.ts               # Point d'entrée de l'application
+├── auth/                    # Authentication module
+├── common/                  # Utilities, interceptors, shared filters
+│   ├── decorators/          # Custom decorators
+│   ├── guards/              # Authorization guards
+│   └── services/            # Shared services
+├── config/                  # Application configuration
+├── database/                # Database modules
+│   ├── categories/          # Categories module
+│   ├── example-entity/      # Example entity with advanced querying
+│   ├── payments/            # Payment processing module
+│   ├── roles/               # Roles management module
+│   ├── schemas/             # Mongoose schemas
+│   ├── token-blacklist/     # Token blacklist module
+│   └── users/               # Users module
+├── storage/                 # File storage module
+│   ├── providers/           # Storage provider implementations
+│   └── storage.service.ts   # Unified storage service
+├── app.module.ts            # Main module
+└── main.ts                  # Application entry point
 ```
 
-## Guide de Développement
+## Development Guide
 
-### Créer un Nouveau Module
+### Creating a New Module
 
-1. **Créer un nouveau répertoire dans `src/database/`**
+1. **Create a new directory in `src/database/`**
    ```bash
    mkdir -p src/database/my-feature
    ```
 
-2. **Créer les fichiers essentiels**
+2. **Create the essential files**
    ```bash
    touch src/database/my-feature/my-feature.module.ts
    touch src/database/my-feature/my-feature.controller.ts
@@ -138,22 +181,23 @@ src/
    mkdir -p src/database/my-feature/dto
    ```
 
-3. **Créer le schema Mongoose dans `src/database/schemas/`**
+3. **Create the Mongoose schema in `src/database/schemas/`**
    ```bash
    touch src/database/schemas/my-feature.schema.ts
    ```
 
-4. **Exemple de structure de module**:
+4. **Example module structure**:
 
    ```typescript
    // my-feature.module.ts
-   import { Module } from '@nestjs/common';
+   import { Module, forwardRef } from '@nestjs/common';
    import { MongooseModule } from '@nestjs/mongoose';
    import { MyFeature, MyFeatureSchema } from '../schemas/my-feature.schema';
    import { MyFeatureController } from './my-feature.controller';
    import { MyFeatureService } from './my-feature.service';
    import { CommonModule } from '../../common/common.module';
    import { RolesModule } from '../roles/roles.module';
+   import { UsersModule } from '../users/users.module';
 
    @Module({
      imports: [
@@ -161,7 +205,8 @@ src/
          { name: MyFeature.name, schema: MyFeatureSchema },
        ]),
        CommonModule,
-       RolesModule, // Si vous utilisez les gardes de rôles
+       RolesModule,
+       forwardRef(() => UsersModule), // Avoid circular dependency
      ],
      controllers: [MyFeatureController],
      providers: [MyFeatureService],
@@ -170,11 +215,37 @@ src/
    export class MyFeatureModule {}
    ```
 
-5. **Importer votre module dans `app.module.ts`**
+5. **Import your module in `app.module.ts`**
 
-### Implémentation de la Pagination par Curseur
+### Implementing Role and Permission Guards
 
-Pour implémenter la pagination par curseur dans votre module, utilisez le `QueryService` du module `CommonModule`:
+Use the built-in guards to protect your endpoints:
+
+```typescript
+// my-feature.controller.ts
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/permissions.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
+
+@Controller('my-features')
+@UseGuards(RolesGuard, PermissionsGuard)
+@ApiBearerAuth('JWT-auth')
+export class MyFeatureController {
+  @Get()
+  @Roles('admin', 'editor')
+  @RequirePermissions('read:my-features')
+  findAll() {
+    // Your code here
+  }
+}
+```
+
+### Implementing Cursor-Based Pagination
+
+Use the QueryService from CommonModule to implement cursor-based pagination:
 
 ```typescript
 // my-feature.service.ts
@@ -201,24 +272,53 @@ export class MyFeatureService {
 }
 ```
 
-### Sécurité et Autorisations
+### Implementing File Storage
 
-Pour protéger vos endpoints avec des autorisations basées sur les rôles:
+Use StorageService to easily handle file uploads:
 
 ```typescript
-// my-feature.controller.ts
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { RolesGuard } from '../../auth/guards/roles.guard';
-import { Roles } from '../../auth/decorators/roles.decorator';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { Injectable } from '@nestjs/common';
+import { StorageService } from '../../storage/storage.service';
 
-@Controller('my-features')
-export class MyFeatureController {
-  @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin', 'user')
-  findAll() {
-    // Votre code ici
+@Injectable()
+export class MyService {
+  constructor(private storageService: StorageService) {}
+
+  async uploadUserProfile(userId: string, file: Express.Multer.File) {
+    const fileInfo = await this.storageService.storeFile(file, 'user-profiles');
+    // Save file info to database
+    return fileInfo;
+  }
+}
+```
+
+### Implementing Payments with Lemon Squeezy
+
+Create a checkout session for a subscription or one-time payment:
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { PaymentsService } from '../../database/payments/payments.service';
+import { CreateCheckoutDto, CheckoutType } from '../../database/payments/dto/create-checkout.dto';
+
+@Injectable()
+export class SubscriptionService {
+  constructor(private paymentsService: PaymentsService) {}
+
+  async createSubscription(userId: string, email: string, name: string) {
+    const checkoutDto: CreateCheckoutDto = {
+      type: CheckoutType.SUBSCRIPTION,
+      variantId: 'your_subscription_variant_id',
+      email,
+      name,
+      successUrl: 'https://yourapp.com/subscription/success',
+      customData: {
+        userId,
+        plan: 'premium'
+      }
+    };
+    
+    return this.paymentsService.createCheckout(userId, checkoutDto);
   }
 }
 ```
@@ -226,34 +326,38 @@ export class MyFeatureController {
 ## Tests
 
 ```bash
-# Tests unitaires
+# Unit tests
 npm run test
 
-# Tests e2e
+# e2e tests
 npm run test:e2e
 
-# Couverture de code
+# Test coverage
 npm run test:cov
 ```
 
-## Déploiement
+## Deployment
 
-Pour déployer en production:
+For production deployment:
 
-1. Assurez-vous que les variables d'environnement sont correctement configurées
-2. Construisez l'application: `npm run build`
-3. Utilisez un gestionnaire de processus comme PM2: `pm2 start dist/main.js --name api`
+1. Make sure environment variables are correctly configured
+2. Build the application: `npm run build`
+3. Use a process manager like PM2: `pm2 start dist/main.js --name api`
 
-## Bonnes Pratiques
+## Best Practices
 
-1. **Respectez l'architecture modulaire** de NestJS
-2. **Utilisez les DTOs** pour la validation des entrées
-3. **Documentez vos endpoints** avec Swagger
-4. **Implémentez des tests** pour chaque fonctionnalité
-5. **Utilisez les filtres d'exception globaux** pour gérer les erreurs
+1. **Respect NestJS modular architecture**
+2. **Use DTOs** for input validation
+3. **Document your endpoints** with Swagger
+4. **Implement tests** for each feature
+5. **Use global exception filters** to handle errors
+6. **Follow forward references pattern** for circular dependencies
+7. **Use proper error handling** for database operations
 
-## Ressources
+## Resources
 
-- [Documentation NestJS](https://docs.nestjs.com)
-- [Documentation Mongoose](https://mongoosejs.com/docs/guide.html)
-- [Documentation JWT](https://jwt.io/introduction)
+- [NestJS Documentation](https://docs.nestjs.com)
+- [Mongoose Documentation](https://mongoosejs.com/docs/guide.html)
+- [JWT Documentation](https://jwt.io/introduction)
+- [Cloudflare R2 Documentation](https://developers.cloudflare.com/r2/)
+- [Lemon Squeezy API Documentation](https://docs.lemonsqueezy.com/api)
